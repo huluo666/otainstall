@@ -1,45 +1,47 @@
 <!DOCTYPE html>
 <html>
-	<head>
-		<meta charset="UTF-8">
-		<title></title>
-		<script type="text/javascript" src="http://static.runoob.com/assets/qrcode/qrcode.min.js"></script>
-<!--	<script src="https://cdn.bootcdn.net/ajax/libs/jquery.qrcode/1.0/jquery.qrcode.min.js"></script>-->
-		<style>
-			.download_btn {
-				display:inline-block; /* 设置为块元素 */
-				width: 180px;
-				height: 40px;
-				line-height: 40px; /* 设置垂直居中 */
-				border-radius:20px;
-				margin:0 auto; 
-				background: #29BB9C;	
-				color:#ffffff;
-			}
-			a:hover {background:#628FA4;}
-		</style>
-	</head>
-	
-	<body>
-		<h2 style="text-align:center;">应用名称</h2>
-		<p style="text-align: center">
-			<a class="download_btn" style="font-size:18px;text-decoration:none;" href="itms-services://?action=download-manifest&url=https://gitee.com/huluo666/IPAInstall/raw/master/manifest.plist">安装</a>
-		</p>
-		<p class="subtitle" style="font-size:15px;text-align:center;">通过Safari打开链接，点击按钮下载安装</p> 
-		<div id="qrcode" style="width:200px; height:200px;margin:0 auto;"></div>
-		<script type="text/javascript">
-			var qrcode = new QRCode(document.getElementById("qrcode"), {
-				width : 200,
-				height : 200,
-				background : "#ffffff", //二维码的后景色  
-				foreground : "#000000", //二维码的前景色 
-				iconSrc: 'logo.png' //二维码中间的图片
-			});
-			function makeCode () {        
-				qrcode.makeCode("https://huluo666.gitee.io/ipainstall/");
-			}
-			makeCode();
-		</script>
-	</body>  
+    <head>
+        <meta charset="UTF-8">
+        <title></title>
+        <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+        <script src="https://cdn.bootcdn.net/ajax/libs/jquery.qrcode/1.0/jquery.qrcode.min.js"></script>
+        <style>
+            .download_btn {
+                display:inline-block; /* 设置为块元素 */
+                width: 180px;
+                height: 40px;
+                line-height: 40px; /* 设置垂直居中 */
+                border-radius:20px;
+                margin:0 auto;
+                background: #29BB9C;   
+                color:#ffffff;
+            }
+            a:hover {background:#628FA4;}
+        </style>
+    </head>
+     
+    <body>
+        <h2 style="text-align:center;">{{ data.CFBundleDisplayName }}</h2>
+        <p style="text-align: center">
+            <a class="download_btn" style="font-size:18px;text-decoration:none;" href="itms-services://?action=download-manifest&url=https://gitee.com/huluo666/IPAInstall/raw/master/manifest.plist">安装</a>
+        </p>
+        
+        <p class="appinfo" style="font-size:15px;text-align:center;color:#9096A3;">版本：{{data.CFBundleShortVersionString}} (build 1) 大小：{{data.filesize}} MB 更新时间 ：1 天前</p>
+        <p class="subtitle" style="font-size:15px;text-align:center;">通过Safari打开链接，点击按钮下载安装</p>
+        <div id="qrcode" style="width:200px; height:200px;margin:0 auto;"></div>
+        <script type="text/javascript">
+            //生成二维码
+            var url = window.location.href;
+            console.log(url)
+            $('#qrcode').qrcode({
+                text: url,      // 二维码的内容
+                render: "canvas",               // 设置渲染方式
+                width: 200,                     // 设置宽度: 默认256
+                height: 200,                    // 设置高度: 默认256
+                background: "#ffffff",          // 背景颜色
+                foreground: "#000000",          // 前景颜色
+                src: "./logo.png",              // logo地址
+            });
+        </script>
+    </body> 
 </html>
-		
