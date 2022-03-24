@@ -37,8 +37,13 @@
         <h1>File Upload</h1>
         
 <!--    <input type="file" name="file"   class="dropify" id="dropifyfile"/>-->
-        <input type="file" id="dropInputFile" class="dropify" />
-        <button type="button" onclick="dropifyUpload()">上传</button>
+        <form  method="post" enctype="multipart/form-data">
+            <input type="file" id="dropInputFile" class="dropify" />
+            <button type="button" onclick="dropifyUpload()">上传</button>
+        </form>
+
+
+    
         
         <script type="text/javascript">
             //生成二维码
