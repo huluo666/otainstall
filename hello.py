@@ -1,6 +1,7 @@
 from flask import Flask
 from flask import render_template, make_response, send_file
 from flask import request, redirect, url_for,session
+from flask import make_response
 from flask_cors import CORS
 
 
@@ -101,8 +102,7 @@ def upload_file():
         if uploaded_file:
             (plist_info,mobileprovision_info)=unzip_ipa(ipaPath)
             print(plist_info)
-            
-    return plist_info
+    return make_response(plist_info)
 
 
 #手机访问的下载包路径
