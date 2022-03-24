@@ -1,6 +1,7 @@
 from flask import Flask
 from flask import render_template, make_response, send_file
 from flask import request, redirect, url_for,session
+from flask_cors import CORS
 
 
 import zipfile
@@ -11,6 +12,7 @@ import datetime
 import sys,os,re
 
 app = Flask(__name__)
+CORS(app)
 
 
 APP_ROOT = os.path.dirname(os.path.abspath(__file__))   # refers to application_top
