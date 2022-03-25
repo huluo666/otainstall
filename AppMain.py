@@ -9,9 +9,6 @@ from flask import Flask
 from flask import render_template, make_response, send_file
 from flask import request, redirect, url_for,session
 from flask import make_response
-from flask_cors import CORS
-
-
 import zipfile
 import plistlib
 import subprocess
@@ -20,12 +17,8 @@ import datetime
 import sys,os,re
 
 app = Flask(__name__)
-CORS(app)
-
-
 APP_ROOT = os.path.dirname(os.path.abspath(__file__))   # refers to application_top
-#ipaPath = os.path.join(APP_ROOT, 'static/hello_world.ipa') #设置一个专门的类似全局变量的东西
-
+defaultIpaPath = os.path.join(APP_ROOT, 'static/hello_world.ipa') #设置一个专门的类似全局变量的东西
 # 文件上传目录
 app.config['UPLOAD_FOLDER'] = 'static/uploads/'
 # 支持的文件格式
