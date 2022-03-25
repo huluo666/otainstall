@@ -120,9 +120,14 @@ def upload_file():
         if upfile:
             print("======upfile111111=======")
             filename = upfile.filename
-            print("filename:"+filename)
-            
-            file_like_object = upfile.stream._file  
+            print("filename:"+filename)            
+            try:
+                print("开始读取文件")
+                file_like_object = upfile.stream._file
+            except IOError:
+                print("Error: 没有找到文件或读取文件失败")
+            else:
+                print("读取文件成功")
             print("file_like_object")
             print(file_like_object)
             print("file_like_object===========")
