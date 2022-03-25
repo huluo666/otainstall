@@ -63,8 +63,6 @@ def unzip_ipa(file):
     provision_path = find_path(ipa_file, 'Payload/[^/]*.app/embedded.mobileprovision')
     provision_data = ipa_file.read(provision_path)
     mobileprovision_info=get_mobileprovision(provision_data)
-    
-    
 #   file.seek(0, os.SEEK_END)
 #   size = file.tell()
 ##   size = sum([zinfo.file_size for zinfo in ipa_file.filelist])
@@ -112,10 +110,10 @@ def index():
 @app.route("/upload_file", methods=["GET", "POST"])
 def upload_file():
     print("99999999999999")
-    print("request.args:"+str(request.args))
     print(request.files)
     plist_info={};
     if request.files:
+        print("======11111111111========")
         file = request.files['file']
         if file:
             filename = file.filename
