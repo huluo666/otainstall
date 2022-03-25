@@ -115,14 +115,16 @@ def upload_file():
     print("request.args:"+str(request.args))
     print(request.files)
     plist_info={};
-    if request.files:
-        file = request.files['file']
-        if file:
-            filename = file.filename
-            file_like_object = file.stream._file  
-            print("filename:"+filename)
-            unzip_ipa(file)
-            (plist_info,mobileprovision_info)=unzip_ipa(file_like_object)
+#   if request.files:
+#       file = request.files['file']
+#       if file:
+#           filename = file.filename
+#           file_like_object = file.stream._file  
+#           print("filename:"+filename)
+#           unzip_ipa(file)
+#           (plist_info,mobileprovision_info)=unzip_ipa(file_like_object)
+#           print(plist_info)
+    plist_info={'BuildMachineOSBuild': '20E232', 'CFBundleDevelopmentRegion': 'en', 'CFBundleDisplayName': '乐牛SDK', 'CFBundleExecutable': 'XianGongZhanJiSDK_Demo', 'CFBundleIcons': {'CFBundlePrimaryIcon': {'CFBundleIconFiles': ['AppIcon20x20', 'AppIcon29x29', 'AppIcon40x40', 'AppIcon60x60'], 'CFBundleIconName': 'AppIcon'}}, 'CFBundleIcons~ipad': {'CFBundlePrimaryIcon': {'CFBundleIconFiles': ['AppIcon20x20', 'AppIcon29x29', 'AppIcon40x40', 'AppIcon60x60', 'AppIcon76x76', 'AppIcon83.5x83.5'], 'CFBundleIconName': 'AppIcon'}}, 'CFBundleIdentifier': 'com.kyren.LNGame', 'CFBundleInfoDictionaryVersion': '6.0', 'CFBundleName': 'XianGongZhanJiSDK_Demo', 'CFBundlePackageType': 'APPL', 'CFBundleShortVersionString': '1.0', 'CFBundleSupportedPlatforms': ['iPhoneOS'], 'CFBundleVersion': '1', 'DTCompiler': 'com.apple.compilers.llvm.clang.1_0', 'DTPlatformBuild': '19C51', 'DTPlatformName': 'iphoneos', 'DTPlatformVersion': '15.2', 'DTSDKBuild': '19C51', 'DTSDKName': 'iphoneos15.2', 'DTXcode': '1321', 'DTXcodeBuild': '13C100', 'LSRequiresIPhoneOS': True, 'MinimumOSVersion': '10.0', 'NSAppTransportSecurity': {'NSAllowsArbitraryLoads': True}, 'NSAppleMusicUsageDescription': '应用通过访问您的照片权限来使用头像上传功能', 'NSCameraUsageDescription': '应用通过访问您的摄像头权限来使用头像拍摄功能', 'NSLocationWhenInUseUsageDescription': '应用希望通过获得您的位置定位权限来使用附近的人的功能', 'NSMicrophoneUsageDescription': '应用希望通过获得您的麦克风权限来使用语音功能', 'NSPhotoLibraryAddUsageDescription': '应用希望通过访问您的照片权限来为您保存游客账号信息', 'NSPhotoLibraryUsageDescription': '应用通过访问您的照片权限来使用头像上传功能', 'NSSpeechRecognitionUsageDescription': '应用希望通过获得您的麦克风权限来使用语音功能', 'NSUserTrackingUsageDescription': '应用希望通过访问您的广告标识符权限来追踪广告和推送您喜欢的内容', 'UIApplicationSupportsIndirectInputEvents': True, 'UIDeviceFamily': [1, 2], 'UILaunchStoryboardName': 'LaunchScreen', 'UIMainStoryboardFile': 'Main', 'UIRequiredDeviceCapabilities': ['armv7'], 'UISupportedInterfaceOrientations': ['UIInterfaceOrientationLandscapeLeft', 'UIInterfaceOrientationLandscapeRight'], 'UISupportedInterfaceOrientations~ipad': ['UIInterfaceOrientationPortrait', 'UIInterfaceOrientationPortraitUpsideDown', 'UIInterfaceOrientationLandscapeLeft', 'UIInterfaceOrientationLandscapeRight']}
     return json.dumps(plist_info)
 
 
