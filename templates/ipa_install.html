@@ -102,11 +102,15 @@
                     processData: false,
                     success: function (data) {
 //                      alert(returndata);
-                        $("#AppName").text(data["CFBundleDisplayName"])
-                        $(".appinfo").text(`版本：${data["CFBundleShortVersionString"]} (build 1) 大小：${data["filesize"]} MB 更新时间 ：1 天前`);
+                        console.log("uploadSuccess")
+                        //JSON2Dict                      
+                        var result = JSON.parse(data);
+                        console.log(data)
+                        $("#AppName").text(result["CFBundleDisplayName"])
+                        $(".appinfo").text(`版本：${result["CFBundleShortVersionString"]} (build 1) 大小：${result["filesize"]} MB 更新时间 ：1 天前`);
                     },
                     error: function (data) {
-                        console.log("Error")
+                        console.log("uploadError")
                         console.log(JSON.stringify(data))
                         alert(data);
                     }
