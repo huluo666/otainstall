@@ -124,7 +124,7 @@ def upload_file():
             unzip_ipa(file)
             (plist_info,mobileprovision_info)=unzip_ipa(file_like_object)
             print(plist_info)
-            return json.dumps(plist_info)
+            return filename
     else:
         return json.dumps(plist_info)
 
