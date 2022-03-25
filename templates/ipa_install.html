@@ -20,6 +20,23 @@
                 color:#ffffff;
             }
             a:hover {background:#628FA4;}
+            
+            
+            #uploadBtn {
+                text-decoration: none;
+                display:block;
+                background-color: #4CAF50;
+                border: none;
+                color: white;
+                width: 180px;
+                height: 40px;
+                line-height: 40px; /* 设置垂直居中 */
+                font-size: 16px;
+                border-radius:5px;
+                margin:10px auto;
+            }
+            
+            
         </style>
     </head>
      
@@ -39,9 +56,9 @@
 <!--    <input type="file" name="file"   class="dropify" id="dropifyfile"/>-->
         <form  method="post" enctype="multipart/form-data">
             <input type="file" id="dropInputFile" class="dropify" />
-            <button type="button" onclick="dropifyUpload()">上传</button>
         </form>
 
+        <button type="button" id="uploadBtn" onclick="dropifyUpload()">解析</button>
 
     
         
