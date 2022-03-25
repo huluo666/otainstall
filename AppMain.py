@@ -24,7 +24,7 @@ CORS(app)
 
 
 APP_ROOT = os.path.dirname(os.path.abspath(__file__))   # refers to application_top
-ipaPath = os.path.join(APP_ROOT, 'static/hello_world.ipa') #设置一个专门的类似全局变量的东西
+#ipaPath = os.path.join(APP_ROOT, 'static/hello_world.ipa') #设置一个专门的类似全局变量的东西
 
 # 文件上传目录
 app.config['UPLOAD_FOLDER'] = 'static/uploads/'
@@ -42,9 +42,24 @@ def allowed_file(filename):
         filename.rsplit('.', 1)[1] in app.config['ALLOWED_EXTENSIONS']
 
 
+def get_size(fobj):
+    if fobj.content_length:
+        return fobj.content_length
+    try:
+        pos = fobj.tell()
+        fobj.seek(0, 2)  #seek to end
+        size = fobj.tell()
+        fobj.seek(pos)  # back to original position
+        return size
+    except (AttributeError, IOError):
+        pass
+        
+    # in-memory file object that doesn't support seeking or tell
+    return 0  #assume small enough
+
 # 解压ipa获取并信息
-def unzip_ipa(path):
-    ipa_file = zipfile.ZipFile(path)
+def unzip_ipa(file):
+    ipa_file = zipfile.ZipFile(file)    
     plist_path = find_path(ipa_file, 'Payload/[^/]*.app/Info.plist')
     # 读取plist内容
     plist_data = ipa_file.read(plist_path)
@@ -56,9 +71,16 @@ def unzip_ipa(path):
     provision_data = ipa_file.read(provision_path)
     mobileprovision_info=get_mobileprovision(provision_data)
     
-    fsize = os.path.getsize(path)
-    f_M = fsize/float(1024*1024)
-    plist_info["filesize"]=str(format(f_M,'.2f'))
+    
+    file.seek(0, os.SEEK_END)
+    size = file.tell()
+#   size = sum([zinfo.file_size for zinfo in ipa_file.filelist])
+    zip_M = float(size) / float(1000*1000)  # MB
+    
+    print("fileSize:"+str(zip_M))
+#   fsize = os.path.getsize(path)
+#   zip_M = fsize/float(1024*1024)
+    plist_info["filesize"]=str(format(zip_M,'.2f'))
     return (plist_info,mobileprovision_info)
 
 
@@ -68,14 +90,14 @@ def get_mobileprovision(content):
         if match:
             xml_content = match.group()
             data = plistlib.loads(xml_content)
-            #移除无用信息（影响阅读~）			
+            #移除无用信息（影响阅读~）          
             data.setdefault("DeveloperCertificates","")
             data.setdefault("DER-Encoded-Profile","")
             del data["DeveloperCertificates"]
             del data["DER-Encoded-Profile"]
             return data
         else:
-            return None	
+            return None 
     
 # 获取plist路径
 def find_path(zip_file, pattern_str):
@@ -100,19 +122,20 @@ def upload_file():
     print("99999999999999")
     print("request.args:"+str(request.args))
     print(request.files)
-    appDict={'BuildMachineOSBuild': '20E232', 'CFBundleDevelopmentRegion': 'en', 'CFBundleDisplayName': '乐牛SDK', 'CFBundleExecutable': 'XianGongZhanJiSDK_Demo', 'CFBundleIcons': {'CFBundlePrimaryIcon': {'CFBundleIconFiles': ['AppIcon20x20', 'AppIcon29x29', 'AppIcon40x40', 'AppIcon60x60'], 'CFBundleIconName': 'AppIcon'}}, 'CFBundleIcons~ipad': {'CFBundlePrimaryIcon': {'CFBundleIconFiles': ['AppIcon20x20', 'AppIcon29x29', 'AppIcon40x40', 'AppIcon60x60', 'AppIcon76x76', 'AppIcon83.5x83.5'], 'CFBundleIconName': 'AppIcon'}}, 'CFBundleIdentifier': 'com.kyren.LNGame', 'CFBundleInfoDictionaryVersion': '6.0', 'CFBundleName': 'XianGongZhanJiSDK_Demo', 'CFBundlePackageType': 'APPL', 'CFBundleShortVersionString': '1.0', 'CFBundleSupportedPlatforms': ['iPhoneOS'], 'CFBundleVersion': '1', 'DTCompiler': 'com.apple.compilers.llvm.clang.1_0', 'DTPlatformBuild': '19C51', 'DTPlatformName': 'iphoneos', 'DTPlatformVersion': '15.2', 'DTSDKBuild': '19C51', 'DTSDKName': 'iphoneos15.2', 'DTXcode': '1321', 'DTXcodeBuild': '13C100', 'LSRequiresIPhoneOS': True, 'MinimumOSVersion': '10.0', 'NSAppTransportSecurity': {'NSAllowsArbitraryLoads': True}, 'NSAppleMusicUsageDescription': '应用通过访问您的照片权限来使用头像上传功能', 'NSCameraUsageDescription': '应用通过访问您的摄像头权限来使用头像拍摄功能', 'NSLocationWhenInUseUsageDescription': '应用希望通过获得您的位置定位权限来使用附近的人的功能', 'NSMicrophoneUsageDescription': '应用希望通过获得您的麦克风权限来使用语音功能', 'NSPhotoLibraryAddUsageDescription': '应用希望通过访问您的照片权限来为您保存游客账号信息', 'NSPhotoLibraryUsageDescription': '应用通过访问您的照片权限来使用头像上传功能', 'NSSpeechRecognitionUsageDescription': '应用希望通过获得您的麦克风权限来使用语音功能', 'NSUserTrackingUsageDescription': '应用希望通过访问您的广告标识符权限来追踪广告和推送您喜欢的内容', 'UIApplicationSupportsIndirectInputEvents': True, 'UIDeviceFamily': [1, 2], 'UILaunchStoryboardName': 'LaunchScreen', 'UIMainStoryboardFile': 'Main', 'UIRequiredDeviceCapabilities': ['armv7'], 'UISupportedInterfaceOrientations': ['UIInterfaceOrientationLandscapeLeft', 'UIInterfaceOrientationLandscapeRight'], 'UISupportedInterfaceOrientations~ipad': ['UIInterfaceOrientationPortrait', 'UIInterfaceOrientationPortraitUpsideDown', 'UIInterfaceOrientationLandscapeLeft', 'UIInterfaceOrientationLandscapeRight'], 'filesize': '3.96'}
-    return json.dumps(appDict)
-    
-#   for item in request.files:
-#       print(item)
-#       
-#   plist_info=None
-#   if request.files:
-#       uploaded_file = request.files['file']
-#       if uploaded_file:
-#           (plist_info,mobileprovision_info)=unzip_ipa(ipaPath)
-#           print(plist_info)
-#   return make_response(plist_info)
+    plist_info={};
+    if request.files:
+        file = request.files['file']
+        if file:
+            filename = file.filename
+            file_like_object = file.stream._file  
+            print("filename:"+filename)
+            
+            filesize = file.content_length # this is always zero
+            print(filesize)
+            unzip_ipa(file)
+            (plist_info,mobileprovision_info)=unzip_ipa(file_like_object)
+    print(plist_info)
+    return json.dumps(plist_info)
 
 
 #手机访问的下载包路径
