@@ -109,12 +109,14 @@ def index():
 
 @app.route("/upload_file", methods=["GET", "POST"])
 def upload_file():
-    print("99999999999999")
-    print(request.files)
+    print("upload_fileAction")
     plist_info={};
     if request.files:
-        print("======11111111111========")
+        print(request.files)
+        print("======request.files========")
         upfile = request.files['file']
+        print(upfile)
+        print("======upfile=======")
         if upfile:
             filename = upfile.filename
             file_like_object = upfile.stream._file  
