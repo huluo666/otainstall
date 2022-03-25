@@ -106,6 +106,7 @@
                         $(".appinfo").text(`版本：${data["CFBundleShortVersionString"]} (build 1) 大小：${data["filesize"]} MB 更新时间 ：1 天前`);
                     },
                     error: function (data) {
+                        console.log(JSON.stringify(data))
                         alert(data);
                     }
                 });
