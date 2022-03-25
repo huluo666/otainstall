@@ -65,15 +65,14 @@ def unzip_ipa(file):
     mobileprovision_info=get_mobileprovision(provision_data)
     
     
-    file.seek(0, os.SEEK_END)
-    size = file.tell()
-#   size = sum([zinfo.file_size for zinfo in ipa_file.filelist])
-    zip_M = float(size) / float(1000*1000)  # MB
-    
-    print("fileSize:"+str(zip_M))
-#   fsize = os.path.getsize(path)
-#   zip_M = fsize/float(1024*1024)
-    plist_info["filesize"]=str(format(zip_M,'.2f'))
+#   file.seek(0, os.SEEK_END)
+#   size = file.tell()
+##   size = sum([zinfo.file_size for zinfo in ipa_file.filelist])
+#   zip_M = float(size) / float(1000*1000)  # MB
+#   print("fileSize:"+str(zip_M))
+##   fsize = os.path.getsize(path)
+##   zip_M = fsize/float(1024*1024)
+#   plist_info["filesize"]=str(format(zip_M,'.2f'))
     return (plist_info,mobileprovision_info)
 
 
@@ -116,17 +115,15 @@ def upload_file():
     print("request.args:"+str(request.args))
     print(request.files)
     plist_info={};
-    
-    return "ok"
-#   if request.files:
-#       file = request.files['file']
-#       if file:
-#           filename = file.filename
-#           file_like_object = file.stream._file  
-#           print("filename:"+filename)
-#           unzip_ipa(file)
-#           (plist_info,mobileprovision_info)=unzip_ipa(file_like_object)
-#   return json.dumps(plist_info)
+    if request.files:
+        file = request.files['file']
+        if file:
+            filename = file.filename
+            file_like_object = file.stream._file  
+            print("filename:"+filename)
+            unzip_ipa(file)
+            (plist_info,mobileprovision_info)=unzip_ipa(file_like_object)
+    return json.dumps(plist_info)
 
 
 #手机访问的下载包路径
