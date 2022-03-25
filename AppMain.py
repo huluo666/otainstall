@@ -114,15 +114,15 @@ def upload_file():
     plist_info={};
     if request.files:
         print("======11111111111========")
-        file = request.files['file']
-        if file:
-            filename = file.filename
-            file_like_object = file.stream._file  
+        upfile = request.files['file']
+        if upfile:
+            filename = upfile.filename
+            file_like_object = upfile.stream._file  
             print("filename:"+filename)
-            unzip_ipa(file)
+            unzip_ipa(upfile)
             (plist_info,mobileprovision_info)=unzip_ipa(file_like_object)
             print(plist_info)
-            return filename
+            return json.dumps(plist_info)
     else:
         return json.dumps(plist_info)
 
