@@ -15,6 +15,7 @@ import subprocess
 import json
 import datetime
 import sys,os,re
+import io
 
 app = Flask(__name__)
 APP_ROOT = os.path.dirname(os.path.abspath(__file__))   # refers to application_top
@@ -114,24 +115,24 @@ def upload_file():
     if request.files:
         print(request.files)
         print("======request.files========")
-        upfile = request.files['file']
-        print(upfile)
+        file = request.files['file']
+        print(file)
         print("======upfile=======")
-        if upfile:
+        if file:
             print("======upfile111111=======")
-            filename = upfile.filename
+            filename = file.filename
             print("filename:"+filename)            
             try:
                 print("开始读取文件")
-                file_like_object = upfile.stream._file
+                file_like_object=io.BytesIO(file.read())
+                print(file_like_object)
+                
             except IOError:
                 print("Error: 没有找到文件或读取文件失败")
             else:
                 print("读取文件成功")
-            print("file_like_object")
-            print(file_like_object)
             print("file_like_object===========")
-            unzip_ipa(upfile)
+            unzip_ipa(file)
             print("unzip_ipa===========0000000")
             (plist_info,mobileprovision_info)=unzip_ipa(file_like_object)
             print("unzip_ipa===========1111111")
