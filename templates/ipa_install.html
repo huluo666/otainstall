@@ -125,7 +125,7 @@
 						try {
 							var result = JSON.parse(data);
 							$("#AppName").text(result["CFBundleDisplayName"])
-							$(".appinfo").text(`版本：${result["CFBundleShortVersionString"]} (build 1) 大小：${result["filesize"]} MB 更新时间 ：1 天前`);
+							$(".appinfo").text(`版本：${result["CFBundleShortVersionString"]} (build 1)  大小：${result["filesize"]}MB  更新时间：1 天前`);
 						} catch (e) {
 							return false;
 						}
