@@ -18,6 +18,7 @@ import sys,os,re
 import io
 
 app = Flask(__name__)
+basedir = os.path.abspath(os.path.dirname(__file__))
 APP_ROOT = os.path.dirname(os.path.abspath(__file__))   # refers to application_top
 defaultIpaPath = os.path.join(APP_ROOT, 'static/hello_world.ipa') #设置一个专门的类似全局变量的东西
 # 文件上传目录
@@ -26,6 +27,8 @@ app.config['UPLOAD_FOLDER'] = 'static/uploads/'
 app.config['ALLOWED_EXTENSIONS'] = {'png', 'jpg', 'jpeg', 'gif','txt','ipa'}  # 集合类型
 app.config['UPLOAD_PATH'] = 'uploads'
 
+
+print(APP_ROOT)
 #@app.route('/')
 #def hello_world():
 #   return 'Hello World!'
@@ -53,7 +56,8 @@ def get_size(fobj):
 
 # 解压ipa获取并信息
 def unzip_ipa(file):
-    ipa_file = zipfile.ZipFile(file)    
+    ipa_file = zipfile.ZipFile(file, 'r')
+#   ipa_file = zipfile.ZipFile(file)    
     plist_path = find_path(ipa_file, 'Payload/[^/]*.app/Info.plist')
     # 读取plist内容
     plist_data = ipa_file.read(plist_path)
@@ -64,10 +68,10 @@ def unzip_ipa(file):
     provision_path = find_path(ipa_file, 'Payload/[^/]*.app/embedded.mobileprovision')
     provision_data = ipa_file.read(provision_path)
     mobileprovision_info=get_mobileprovision(provision_data)
-    file.seek(0, os.SEEK_END)
-    size = file.tell()
-    zip_M = float(size) / float(1000*1000)  # MB
-    plist_info["filesize"]=str(format(zip_M,'.2f'))
+##   file.seek(0, os.SEEK_END)
+##   size = file.tell()
+##   zip_M = float(size) / float(1000*1000)  # MB
+#   plist_info["filesize"]=str(format(zip_M,'.2f'))
     return (plist_info,mobileprovision_info)
 
 
@@ -114,11 +118,21 @@ def upload_file():
         file = request.files['file']
         print(file)
         if file:
-            filename = file.filename
-            file_like_object=io.BytesIO(file.read())
-            unzip_ipa(file)
-            (plist_info,mobileprovision_info)=unzip_ipa(file_like_object)
-            print(plist_info)
+            #保存文件           
+            filename = file.filename        
+#           file_like_object=io.BytesIO(file.read())
+#           unzip_ipa(file)
+#           (plist_info,mobileprovision_info)=unzip_ipa(file_like_object)
+#           print(plist_info)
+            
+            upload_filePath=os.path.join(app.config['UPLOAD_FOLDER'], filename)
+            print(upload_filePath)            
+            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+            ipaPath= os.path.join(APP_ROOT,upload_filePath) #设置一个专门的类似全局变量的东西
+            print(f"ipaPath:{ipaPath}")  
+            
+            (plist_info,mobileprovision_info)=unzip_ipa("/Users/jenkins/Github/otainstall/static/uploads/梦幻飞仙.ipa")
+            print(plist_info)            
             return json.dumps(plist_info)
     else:
         return json.dumps(plist_info)
