@@ -130,8 +130,7 @@ def upload_file():
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
             ipaPath= os.path.join(APP_ROOT,upload_filePath) #设置一个专门的类似全局变量的东西
             print(f"ipaPath:{ipaPath}")  
-            
-            (plist_info,mobileprovision_info)=unzip_ipa("/Users/jenkins/Github/otainstall/static/uploads/梦幻飞仙.ipa")
+            (plist_info,mobileprovision_info)=unzip_ipa(ipaPath)
             print(plist_info)            
             return json.dumps(plist_info)
     else:
